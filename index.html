@@ -258,16 +258,16 @@
         </h1>
 
         <p class="subtitle">
-            PROTOCOL LAUNCHING SOON.<br>
+            STORE OPEN.<br>
             MADRID • 2026
         </p>
 
         <div class="form-wrapper">
             <form id="waitlistForm">
-                <input type="email" id="emailInput" placeholder="Tu correo para acceso anticipado..." required>
-                <button type="submit">Unirse a la Lista</button>
+                <input type="email" id="emailInput" placeholder="Enter your email to enter..." required>
+                <button type="submit">ENTER STORE</button>
             </form>
-            <div id="responseMessage" class="message">Bienvenida al Inner Circle. 🤍</div>
+            <div id="responseMessage" class="message">Redirecting...</div>
         </div>
 
         <footer>
@@ -278,6 +278,7 @@
     <script>
         // CONFIGURATION: PASTE YOUR GOOGLE SCRIPT URL HERE
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqYX4vaZjFHn0W9rpLtcWnLgvx7GJKSEC8e6Cl592kOrzMP_FSmefn8SneCxWI8d34/exec';
+        const STORE_URL = 'https://femm.store/';
 
         const form = document.getElementById('waitlistForm');
         const messageDiv = document.getElementById('responseMessage');
@@ -286,16 +287,12 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (!SCRIPT_URL.startsWith('http')) {
-                alert("Error: Development Config Missing. Please set the SCRIPT_URL in the code.");
-                return;
-            }
 
-            button.innerText = "ENVIANDO...";
+            button.innerText = "VERIFYING...";
             button.style.opacity = "0.7";
             button.disabled = true;
 
-            // Create FormData object (Google Scripts expects key=value pairs)
+            // Create FormData object
             const formData = new FormData();
             formData.append('email', emailInput.value);
             formData.append('timestamp', new Date().toISOString());
@@ -303,18 +300,20 @@
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 body: formData,
-                mode: 'no-cors' // Essential for Google Apps Script to work without CORS errors
+                mode: 'no-cors'
             })
                 .then(() => {
-                    // Success (no-cors mode doesn't return JSON, so we assume success if no network error)
+                    // Success
                     form.style.display = 'none';
                     messageDiv.classList.add('visible');
-                    console.log("Email sent to sheet");
+
+                    // Redirect immediately
+                    window.location.href = STORE_URL;
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    button.innerText = "ERROR - TRY AGAIN";
-                    button.disabled = false;
+                    // Fallback redirect even if tracking fails, to not block the user
+                    window.location.href = STORE_URL;
                 });
         });
     </script>

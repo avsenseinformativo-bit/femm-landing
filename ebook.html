@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Glass Skin Protocol | FEMM (Text Edition)</title>
+    <style>
+        /* --- PRINT & LAYOUT SETTINGS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-color: #fcfbf9;
+            --text-color: #111;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #222;
+            margin: 0;
+            padding: 40px;
+            font-family: var(--font-sans);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .page {
+            background: var(--bg-color);
+            width: 210mm;
+            height: 297mm;
+            /* Fixed Height for A4 */
+            padding: 20mm 20mm;
+            /* Reduced padding slightly for safety */
+            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+            text-align: justify;
+        }
+
+        /* --- PRINT MEDIA QUERY --- */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+                /* CRITICAL: Resets browser default margins */
+            }
+
+            body {
+                background: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .page {
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+                page-break-after: always;
+                margin: 0;
+                border: none;
+                overflow: visible !important;
+                /* Allow spillover if necessary */
+                transform: scale(1);
+                /* Ensure 100% scale */
+            }
+        }
+
+        /* --- COVER PAGE STYLES --- */
+        .page.cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            border: none;
+        }
+
+        .cover-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: -40px;
+        }
+
+        .cover-title {
+            font-family: var(--font-serif);
+            font-size: 50pt;
+            letter-spacing: -2px;
+            margin-bottom: 40px;
+            line-height: 1.1;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        .cover-subtitle-box {
+            border-top: 1px solid #111;
+            border-bottom: 1px solid #111;
+            padding: 20px 60px;
+            margin-bottom: 60px;
+            display: inline-block;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-serif);
+            color: #000;
+            margin: 0 0 15pt 0;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 22pt;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 10pt;
+            /* Slightly reduced to ensure fit */
+            line-height: 1.6;
+            color: #222;
+            margin-bottom: 14pt;
+            font-weight: 300;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+            margin-bottom: 15pt;
+        }
+
+        li {
+            font-size: 10pt;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .chapter-title {
+            font-family: var(--font-sans);
+            font-size: 10pt;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 40px;
+            display: block;
+            text-align: center;
+        }
+
+        .page-num {
+            position: absolute;
+            bottom: 15mm;
+            width: 100%;
+            text-align: center;
+            font-family: var(--font-serif);
+            font-size: 11pt;
+            font-style: italic;
+            left: 0;
+        }
+
+        /* --- LAYOUTS --- */
+        .two-col {
+            column-count: 2;
+            column-gap: 40px;
+            min-height: 50%;
+            /* Changed from height:100% to avoid overflow issues */
+        }
+
+        .pull-quote {
+            font-family: var(--font-serif);
+            font-size: 18pt;
+            font-style: italic;
+            line-height: 1.4;
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page cover">
+        <div style="width: 100%; text-align: center; margin-top: 20px;">
+            <span
+                style="font-size: 10pt; letter-spacing: 5px; text-transform: uppercase; color: #666; font-family: var(--font-sans);">FEMM
+                COSMETICS</span>
+        </div>
+        <div class="cover-content">
+            <h1 class="cover-title">THE GLASS SKIN<br>PROTOCOL</h1>
+            <div class="cover-subtitle-box">
+                <div
+                    style="font-size: 11pt; letter-spacing: 3px; font-weight: 400; text-transform: uppercase; font-family: var(--font-sans);">
+                    Comprehensive Manual</div>
+                <div
+                    style="font-size: 11pt; letter-spacing: 3px; font-weight: 400; text-transform: uppercase; margin-top:5px; font-family: var(--font-sans);">
+                    Vol. I</div>
+            </div>
+            <div style="margin-top:40px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <p
+                    style="font-style:italic; font-family:var(--font-serif); font-size:12pt; color:#666; margin-bottom:5px;">
+                    Property of</p>
+                <div style="border-bottom:1px solid #666; width:250px; height:1px;"></div>
+            </div>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <p
+                style="font-size:8pt; color:#888; letter-spacing: 2px; text-transform:uppercase; font-family: var(--font-sans);">
+                21-Day Intensive Course for Cellular Rejuvenation</p>
+        </div>
+    </div>
+
+    <!-- PAGE 2: PHILOSOPHY -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 01: FOUNDATIONS</span>
+        <h2>The physiological state of "Glass Skin"</h2>
+        <div class="two-col">
+            <p>"Glass Skin" is often misinterpreted by the Western beauty industry as a purely cosmetic effect,
+                achievable through highlighters, oils, or temporary glosses. This definition is fundamentally flawed. In
+                the clinical context of the FEMM Protocol, Glass Skin refers to a specific physiological condition of
+                the Stratum Corneum (the outermost layer of the epidermis) characterized by optimal hydration, minimal
+                inflammation, and structural uniformity.</p>
+            <p>When skin cells are perfectly hydrated, they lay flat, creating a smooth surface that reflects light
+                coherently—similar to a pane of glass. When skin is dehydrated or inflamed, these cells curl upward at
+                the edges, scattering light and creating a dull, matte appearance. Therefore, our goal is not to "add
+                shine" to your face, but to fundamentally alter the behavior of your skin cells so they retain water and
+                lie flat.</p>
+            <p>The modern skincare market pushes "exfoliation" as the path to radiance. You are sold acids, peels, and
+                scrubs promising to reveal "fresh" skin. However, chronic over-exfoliation destroys the skin barrier,
+                creating micro-tears and chronic inflammation (erythema). This leads to the "waxy" look of stripped
+                skin, not the "glassy" look of healthy skin.</p>
+            <p>The FEMM philosophy is <strong>"Barrier First"</strong>. We operate on the principle of Corneotherapy:
+                the science of repairing the Stratum Corneum to defend against external pathogens while locking in
+                internal moisture. By utilizing bio-identical lipids and anti-inflammatory botanicals like Centella
+                Asiatica, we signal the skin to stop fighting and start healing.</p>
+            <p>This 21-day protocol is a reset. It is a departure from the "more is better" approach. We are stripping
+                back your routine to the essential clinical actives required for cellular turnover and repair. You are
+                entering a disciplined regimen that prioritizes long-term biological health over short-term cosmetic
+                fixes.</p>
+            <p>Understand that consistency is the primary active ingredient. Skincare is not magic; it is biology. It
+                takes approximately 28 days for a skin cell to form, migrate to the surface, and shed. Our 21-day
+                program is designed to intercept this cycle, nourishing the new cells as they form so that by the end of
+                the month, your new "surface" is fundamentally different from the one you have today.</p>
+        </div>
+        <div class="page-num">1</div>
+    </div>
+
+    <!-- PAGE 3: TEWL -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 02: MECHANISMS</span>
+        <h2>Understanding Transepidermal Water Loss (TEWL)</h2>
+        <div class="two-col">
+            <p>The enemy of Glass Skin is Transepidermal Water Loss, or TEWL. This is the passive evaporation of water
+                from the deep layers of your dermis out into the atmosphere. When your barrier is compromised (due to
+                harsh cleansing, hot water, or environmental stress), TEWL accelerates. Your skin literally evaporates,
+                leaving behind a shriveled, dull landscape susceptible to fine lines.</p>
+            <p>The FEMM products are engineered specifically to halt TEWL. We use a "Sandwich Method" of hydration that
+                addresses water loss at three levels:</p>
+            <h3>1. The Humectant Layer (Attraction)</h3>
+            <p>Our Hydro-Boosting Toner contains varying molecular weights of Hyaluronic Acid. Low molecular weight
+                molecules penetrate deep to hydrate the dermis, while high molecular weight molecules sit on the
+                surface, pulling moisture from the air into your skin. This creates a reservoir of water.</p>
+            <h3>2. The Emollient Phase (Softening)</h3>
+            <p>The Brightening Ampoule Serum provides emollients that sink into the spaces between skin cells, replacing
+                lost lipids. This smooths the rough edges of the cell walls, immediately improving texture and light
+                reflection.</p>
+            <h3>3. The Occlusive Seal (Locking)</h3>
+            <p>The Barrier Repair Cream acts as a biological shield. It forms a breathable, semi-permeable membrane over
+                the skin that physically prevents water molecules from escaping. Without this final step, all the
+                hydration from the previous steps would evaporate within an hour.</p>
+            <div class="pull-quote">"We do not hydrate the skin to make it wet. We hydrate the skin to enable enzymatic
+                function."</div>
+            <p>Your skin's natural desquamation (exfoliation) process is controlled by enzymes that require water to
+                function. When skin is dry, these enzymes stall, and dead cells build up in clumps, leading to clogged
+                pores and dullness. By flooding the tissue with hydration, we reactivate these enzymes, allowing your
+                skin to naturally shed dead cells invisibly and evenly, revealing the fresh glow underneath without the
+                need for harsh scrubs.</p>
+        </div>
+        <div class="page-num">2</div>
+    </div>
+
+    <!-- PAGE 4: AM ROUTINE -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 03: MORNING PROTOCOL</span>
+        <h2>A.M. Ritual: Protection & Hydration</h2>
+        <p>The goal of the morning routine is not to "fix" the skin, but to prepare and defend it. You face UV
+            radiation, pollution, and blue light throughout the day. Your morning face is your shield.</p>
+        <h3>Step 1: The Cloud Cleanse (60 Seconds)</h3>
+        <p><strong>Rationale:</strong> Overnight, your skin excretes toxins and sweat, but rarely produces "dirt". We
+            need to remove this metabolic debris without stripping the lipids produces during sleep.</p>
+        <p><strong>Technique:</strong> Wet your face with cool water (never hot). Dispense exactly one pump of Cloud
+            Cleansing Foam. Emulsify heavily in your hands before touching your face. Massage in circular motions,
+            focusing on the T-zone (forehead, nose, chin). Do not scrub. Let the foam do the work. Rinse with 10
+            splashes of cool water to constrict capillaries and reduce morning puffiness.</p>
+        <h3>Step 2: The Hydro-Imprint (Toning)</h3>
+        <p><strong>Rationale:</strong> Damp skin absorbs active ingredients 10x better than dry skin. The toner
+            re-balances the pH of your skin after cleansing.</p>
+        <p><strong>Technique:</strong> Do <strong>not</strong> use a cotton pad. Cotton absorbs 40% of the product,
+            which is wasteful and creates unnecessary friction. Dispense the toner into your cupped palm. Rub your palms
+            together to warm the liquid to body temperature. Press—firmly—your palms onto your cheeks, forehead, and
+            chin. Imagine you are pushing the water into the pores. Repeat this "press and release" motion until the
+            skin feels tacky.</p>
+        <h3>Step 3: The Active Serum (Brightening)</h3>
+        <p><strong>Rationale:</strong> This is the treatment phase. We are delivering concentrated Centella Asiatica and
+            Niacinamide to target pigment-producing melanocytes.</p>
+        <p><strong>Technique:</strong> Apply 3-4 drops directly onto the skin: one of the forehead, one on each cheek.
+            Use your fingertips to tap the serum in rapid, piano-playing motions. This "tapotement" increases
+            micro-circulation, bringing oxygen-rich blood to the surface which aids absorption. Focus extra tapping on
+            areas of hyperpigmentation or redness.</p>
+        <h3>Step 4: The Occlusive Seal (Cream)</h3>
+        <p><strong>Rationale:</strong> To lock in the water and creating a smooth canvas for SPF or makeup.</p>
+        <p><strong>Technique:</strong> Take a pearl-sized amount of Barrier Repair Cream. Warm it between your
+            fingertips until it turns translucent. Press it gently over the serum. Do not rub vigorously. Let it set for
+            60 seconds before applying sunscreen. This ensures the barrier is intact and wont "pill" or roll off.</p>
+        <div class="page-num">3</div>
+    </div>
+
+    <!-- PAGE 5: PM ROUTINE -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 04: EVENING PROTOCOL</span>
+        <h2>P.M. Ritual: Repair & Reconstruction</h2>
+        <p>Night is when the magic happens. Your skin switches from "Defense Mode" to "Repair Mode". Cellular
+            regeneration rates double between 11 PM and 4 AM. Our goal is to provide the building blocks for this
+            construction work.</p>
+        <h3>Step 1: The Double Cleanse (Mandatory)</h3>
+        <p><strong>Rationale:</strong> Sunscreen and makeup are designed to stick to your face. Water alone cannot
+            remove them. You must cleanse twice.</p>
+        <p><strong>Technique:</strong><br>
+            <em>Wash 1:</em> Apply foam to dry skin (if wearing heavy makeup) or damp skin. Massage for 60 seconds to
+            break down oils, pigments, and silicones. Rinse.<br>
+            <em>Wash 2:</em> Apply foam again. This second wash actually cleans the pores now that the surface debris is
+            gone. Focus on the hairline and jawline where congestion accumulates.
+        </p>
+        <h3>Step 2: The "7-Skin" Toning Method</h3>
+        <p><strong>Rationale:</strong> At night, we want maximum saturation. One layer of hydration is not enough to
+            last 8 hours of sleep.</p>
+        <p><strong>Technique:</strong> Apply a layer of toner. Wait 30 seconds for it to sink in. Apply a second layer.
+            Wait. Apply a third. In Korean dermatology, this layering can go up to 7 times. For this protocol, we
+            recommend at least 3 layers. This plumps the skin cells completely, eliminating fine dehydration lines.</p>
+        <h3>Step 3: The V-Lift Protocol (Device Integration)</h3>
+        <p><strong>Rationale:</strong> Before the final cream, whilst skin is wet with serum, we use the V-Lift device
+            to train the muscles. (See Chapter 05 for full manual).</p>
+        <h3>Step 4: The Slugging Technique</h3>
+        <p><strong>Rationale:</strong> We utilize the Barrier Cream as a "Sleeping Mask".</p>
+        <p><strong>Technique:</strong> Apply a generous layer of cream, thicker than you would in the day. It should
+            leave a visible white cast that fades after a few minutes. This thick layer creates a sauna-effect, trapping
+            heat and moisture, which softens the sebum in your pores, making them appear smaller by morning. Do not
+            worry about "greasiness"; your skin is thirsty and will drink this up by sunrise.</p>
+        <div class="page-num">4</div>
+    </div>
+
+    <!-- PAGE 6: V-LIFT PART 1 -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 05: SCULPTING</span>
+        <h2>The V-Lift Device Manual: Anatomy & Action</h2>
+        <div class="two-col">
+            <p>The V-Lift is not a toy; it is a Microcurrent and Sonic Vibration tool designed to mimic the hands of an
+                aesthetician. It works on two principles: <strong>Lymphatic Drainage</strong> (moving fluid) and
+                <strong>Muscle Stimulation</strong> (toning).
+            </p>
+            <p><strong>Usage Warning:</strong> Never use on dry skin. You must have a "slip" agent (Serum or heavy
+                Toner) so the device glides without dragging the delicate tissue.</p>
+            <h3>Zone A: The Jawline (The "V" Shape)</h3>
+            <p>Fluid tends to accumulate in the lower face, creating a heavy, sagging appearance (jowls). We must drain
+                this fluid towards the lymph nodes behind the ears.</p>
+            <ul>
+                <li><strong>Placement:</strong> Cup the curved "Guasha" edge of the device against the center of your
+                    chin.</li>
+                <li><strong>Motion:</strong> Glide firmly outwards and upwards along the jawbone until you reach the
+                    earlobe.</li>
+                <li><strong>The Pause:</strong> When you reach the ear, wiggle the device slightly to stimulate the
+                    lymph node.</li>
+                <li><strong>Drain:</strong> Drag the device straight down the neck to the collarbone to flush the fluid.
+                </li>
+                <li><strong>Reps:</strong> 15 times per side.</li>
+            </ul>
+            <h3>Zone B: The Chemekbones (Zygomatic Lift)</h3>
+            <p>Over time, the cheek muscles lengthen and drop. We want to shorten and lift them to restore the "Triangle
+                of Youth".</p>
+            <ul>
+                <li><strong>Placement:</strong> Hook the device curve "under" the apple of your cheek (flanking the
+                    nose).</li>
+                <li><strong>Motion:</strong> Push UP and OUT towards the temples. You are literally scooping the cheek
+                    muscle up.</li>
+                <li><strong>The Hold:</strong> Hold the lift at the hairline for 3 seconds.</li>
+                <li><strong>Reps:</strong> 10 times per side.</li>
+            </ul>
+        </div>
+        <div class="page-num">5</div>
+    </div>
+
+    <!-- PAGE 7: V-LIFT PART 2 -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 05: SCULPTING (CONT)</span>
+        <h2>Advanced Lifting Techniques</h2>
+        <div class="two-col">
+            <h3>Zone C: The Brow Lift (Frontalis Muscle)</h3>
+            <p>We hold a lot of tension in our forehead, leading to horizontal lines and heavy eyelids. Relaxing this
+                muscle opens the eyes.</p>
+            <ul>
+                <li><strong>Placement:</strong> Place the device just above the thickest part of your eyebrow.</li>
+                <li><strong>Motion:</strong> Glide straight up towards the hairline. Apply medium pressure.</li>
+                <li><strong>The Fan:</strong> Work your way from the inner brow to the outer tail of the brow in a
+                    fanning motion.</li>
+                <li><strong>Reps:</strong> 10 glides across the forehead.</li>
+            </ul>
+            <h3>Zone D: The Tech-Neck Eraser (Platysma)</h3>
+            <p>Looking down at phones creates horizontal lines on the neck. We use vibration to relax these bands.</p>
+            <ul>
+                <li><strong>Placement:</strong> Start at the clavicle (collarbone).</li>
+                <li><strong>Motion:</strong> Glide UPWARDS towards the jaw. (Note: This is opposite to drainage. We are
+                    toning the muscle here).</li>
+                <li><strong>Caution:</strong> Avoid the direct center of the throat (thyroid area). Work on the sides of
+                    the neck.</li>
+                <li><strong>Reps:</strong> 20 times.</li>
+            </ul>
+            <h3>Frequency & Maintenance</h3>
+            <p>For the first 21 days, use the device every single night effectively "bootcamping" your facial muscles.
+                After the protocol, you can switch to maintenance mode (3 times a week). The results are cumulative.
+                Skipping a day resets the momentum.</p>
+        </div>
+        <div class="page-num">6</div>
+    </div>
+
+    <!-- PAGE 8: NUTRITION -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 06: INTERNAL PROTOCOL</span>
+        <h2>Nutritional Dermatology: Feeding the Barrier</h2>
+        <p>You cannot effectively skincare your way out of a high-inflammation diet. The skin is an excretory organ;
+            what you put in helps determine what comes out. For this 21-day timeline, we require a commitment to an
+            anti-inflammatory diet.</p>
+        <h3>1. Essential Fatty Acids (EFAs)</h3>
+        <p>Your cell membranes are made of fat. To make them plump and fluid (glassy), you need to eat healthy fats. A
+            low-fat diet often results in dry, crepey skin.</p>
+        <p><strong>The Prescription:</strong> Eat one serving of the following daily:
+            <br>- Avocado (Monounsaturated fats)
+            <br>- Walnuts or Flaxseeds (Omega-3s)
+            <br>- Wild Salmon or Mackerel
+            <br>- Extra Virgin Olive Oil (drizzled raw, not high-heat cooked)
+        </p>
+        <h3>2. Hydration vs. Water</h3>
+        <p>Drinking 3 liters of water is good, but if your mineral balance is off, you will just pee it out. You need
+            "structured water" found in fruits and vegetables, which comes packaged with electrolytes.</p>
+        <p><strong>The Prescription:</strong> "Eat" your water.
+            <br>- Cucumber (96% water + silica for collagen)
+            <br>- Watermelon (Lycopene for sun defense)
+            <br>- Celery (Natural sodium for mineral balance)
+        </p>
+        <h3>3. The Glow Killers (ELIMINATE)</h3>
+        <p>For 21 days, strictly avoid:
+            <br><strong>Dairy:</strong> Contains growth hormones (IGF-1) that mimic insulin and trigger oil glands,
+            leading to cystic acne. Switch to Almond or Oat milk.
+            <br><strong>Refined Sugar:</strong> Causes "Glycation". Sugar molecules bind to collagen fibers and make
+            them stiff and brittle, leading to premature sagging and loss of bounce.
+            <br><strong>Alcohol:</strong> It is a systemic diuretic. It sucks water out of every cell in your body,
+            leaving skin grey and tired.
+        </p>
+        <div class="page-num">7</div>
+    </div>
+
+    <!-- PAGE 9: SLEEP -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 07: LIFESTYLE FACTORS</span>
+        <h2>The Architecture of Sleep</h2>
+        <div class="two-col">
+            <p>Sleep is when your cortisol (stress hormone) drops and growth hormone rises. Cortisol breaks down
+                collagen; Growth Hormone rebuilds it. If you sleep 5 hours a week, you are literally aging faster.</p>
+            <h3>The Silk Pillowcase Rule</h3>
+            <p>Cotton acts as a mild abrasive. Tossing and turning on cotton for 8 hours a night causes micro-friction
+                that accelerates wrinkle formation and frizz. It also absorbs your expensive night cream.
+                <br><strong>Action:</strong> Switch to a Silk or Satin pillowcase. It minimizes friction and creates a
+                non-absorbent surface for your skin.
+            </p>
+            <h3>Temperature Regulation</h3>
+            <p>Sleeping in a hot room causes night sweats, which dehydrates the skin and breeds bacteria.
+                <br><strong>Action:</strong> Keep your bedroom cool (around 18-20°C). If the air is dry (AC or heating),
+                use a humidifier. A humidifier is arguably the most important skincare device you can own after the
+                V-Lift.
+            </p>
+            <h3>Cortisol Management</h3>
+            <p>High stress spikes cortisol, which triggers oil production and inflammation.
+                <br><strong>Action:</strong> Practice "Box Breathing" before sleep (Inhale 4s, Hold 4s, Exhale 4s, Hold
+                4s). This switches your nervous system from Sympathetic (Fight/Flight) to Parasympathetic (Rest/Digest),
+                optimizing the skin's night repair cycle.
+            </p>
+        </div>
+        <div class="page-num">8</div>
+    </div>
+
+    <!-- PAGE 10: TROUBLESHOOTING -->
+    <div class="page">
+        <span class="chapter-title">CHAPTER 08: DIAGNOSTICS</span>
+        <h2>Troubleshooting Your Journey</h2>
+        <h3>"I am breaking out in Week 1."</h3>
+        <p><strong>Diagnosis: Purging.</strong><br>
+            When you increase cellular turnover with Niacinamide and massage, deep-seated congestion (micro-comedones)
+            is pushed to the surface rapidly.
+            <br><strong>differentiation:</strong> A purge happens in areas where you usually break out and disappears in
+            3-4 days. A bad reaction (breakout) happens continuously or in new areas.
+            <br><strong>Solution:</strong> Continue the protocol. Do not stop. It is better out than in.
+        </p>
+        <h3>"My skin feels tingly when I apply product."</h3>
+        <p><strong>Diagnosis: Compromised Barrier.</strong><br>
+            Active ingredients penetrate too fast because your barrier "cracks" are open.
+            <br><strong>Solution:</strong> Apply the Barrier Repair Cream immediately. The tingling should stop within 3
+            days as the barrier seals.
+        </p>
+        <h3>"I don't see results yet (Day 10)."</h3>
+        <p><strong>Diagnosis: Plateau.</strong><br>
+            The first stage is invisible repair (under the surface). The visible "Glass" effect usually manifests in
+            Week 3, once the old dead cells have fully shed and the new, hydrated cells reach the surface.
+            <br><strong>Solution:</strong> Patience. Take a photo today and compare it on Day 21. We are poor judges of
+            our own daily changes.
+        </p>
+        <div class="pull-quote">"True radiance is not a destination; it is a daily practice. Welcome to your new skin."
+        </div>
+        <div class="page-num">9</div>
+    </div>
+
+</body>
+
+</html>
